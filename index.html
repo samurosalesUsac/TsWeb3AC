@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+
+    <!--    <script src="models/TsModels/Node.js"></script>-->
+    <!--    <script src="models/TsModels/Body.js"></script>-->
+    <!--    <script src="models/TsModels/MainScope.js"></script>-->
+
+    <!--    <script src="models/TsModels/Scope.js"></script>-->
+    <!--    <script src="models/TsModels/VariableManagement/CreateVariable.js"></script>-->
+    <!--    <script src="models/TsModels/StructManagement/Struct.js"></script>-->
+    <!--    <script src="models/TsModels/StructManagement/Instance.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/BreakSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/DoWhileSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/ForSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/IfSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/PrintSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/ReturnSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/SwitchSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/Statements/WhileSttmnt.js"></script>-->
+    <!--    <script src="models/TsModels/ObjectClassManagement/ObjectClass.js"></script>-->
+    <!--    <script src="models/TsModels/ObjectClassManagement/NewObj.js"></script>-->
+    <!--    <script src="models/TsModels/FunctionManagement/Call.js"></script>-->
+    <!--    <script src="models/TsModels/FunctionManagement/Function.js"></script>-->
+    <!--    <script src="models/TsModels/FunctionManagement/ParameterValue.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/AritmethicalExpression.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/Expression.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/GetId.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/Increase.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/LogicalExpression.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/RelationalExpression.js"></script>-->
+    <!--    <script src="models/TsModels/Expression/Symbol.js"></script>-->
+
+    <!--    <script src="Grammars/JSharpGrammar/Grammar.js"></script>-->
+
+
+
+    <!--    <script src="models/_3AddressCode/CodeLine/CodeLine.js"></script>-->
+    <!--    <script src="models/_3AddressCode/CodeLine/Expression.js"></script>-->
+    <!--    <script src="models/_3AddressCode/CodeLine/TemporalCall.js"></script>-->
+    <!--    <script src="models/_3AddressCode/CodeLine/Value.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Label/Goto.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Label/If.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Label/IfFalse.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Label/Label.js"></script>-->
+    <!--    <script src="models/_3AddressCode/MemoryAccess/HeapAccess.js"></script>-->
+    <!--    <script src="models/_3AddressCode/MemoryAccess/StackAccess.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Method/Call.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Method/Method.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Cycle.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Main.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Print/Print.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Method/Begin.js"></script>-->
+    <!--    <script src="models/_3AddressCode/Method/End.js"></script>-->
+    <!--    <script src="models/_3AddressCode/ErrorHandle/Error.js"></script>-->
+
+    <!--    <script src="Grammars/3ACode/_3ACode.js"></script>-->
+<!--    <script src="Grammars/TsGrammar/TsGrammar.js"></script>-->
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!--CodeMirror-->
+
+    <link rel="stylesheet" href="public/stylesheets/style.css">
+    <script src="public/codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="public/codemirror/lib/codemirror.css">
+
+
+    <script src="public/codemirror/mode/xml/xml.js"></script>
+
+    <script src="public/codemirror/addon/edit/closebrackets.js"></script>
+    <script src="public/codemirror/addon/edit/matchtags.js"></script>
+    <script src="public/codemirror/addon/edit/trailingspace.js"></script>
+
+    <link rel="stylesheet" href="public/codemirror/theme/dracula.css">
+
+    <script src="public/codemirror/mode/javascript/javascript.js"></script>
+
+
+
+    <!--    Index-->
+
+
+
+
+
+    <script src="public/Gojs/release/go.js"></script>
+    <script src="public/Gojs/assets/js/goSamples.js"></script>
+
+
+    <script src="TsTo3AC/Scope.js"></script>
+    <script src="TsTo3AC/Node.js"></script>
+    <script src="TsTo3AC/Expression/Symbol.js"></script>
+    <script src="TsTo3AC/Body.js"></script>
+    <script src="TsTo3AC/MainScope.js"></script>
+
+    <script src="TsTo3AC/FunctionManagement/Call.js"></script>
+    <script src="TsTo3AC/FunctionManagement/Function.js"></script>
+    <script src="TsTo3AC/FunctionManagement/ParameterValue.js"></script>
+
+    <script src="TsTo3AC/VariableManagement/CreateVariable.js"></script>
+    <script src="TsTo3AC/VariableManagement/AssignVariable.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Addition.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Subtraction.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Times.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Divide.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Module.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Power.js"></script>
+
+    <script src="TsTo3AC/Expression/Logical/AndOp.js"></script>
+    <script src="TsTo3AC/Expression/Logical/OrOp.js"></script>
+
+    <script src="TsTo3AC/Expression/Relational/RelationalExpression.js"></script>
+    
+    <script src="TsTo3AC/Expression/Expression.js"></script>
+    <script src="TsTo3AC/Expression/GetId.js"></script>
+
+    <!--Statements-->
+    <script src="TsTo3AC/Statements/ReturnSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/PrintSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/BreakSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/IfSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/WhileSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/DoWhileSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/ContinueSttmnt.js"></script>
+
+
+    <!--Exec Nodes-->
+
+
+
+
+</head>
+<body>
+
+<div class="container">
+    <h2>MatrioshTS</h2>
+
+    <br>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#home">Main</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu1">Errores</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu2">Tabla de Simbolos</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="home" class="container tab-pane active"><br>
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-danger" id="compilef"   onclick="CompileCode()" >Compilar</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-danger"   onclick="translateCode()" >Traducir</button>
+                    </div>
+                </div>
+
+                <br/>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <textarea id="editor"  >
+let i : number = 0;
+
+do {
+  i = i + 1;
+
+  let a : number = 0
+
+  while(a < 3){
+    a = a + 1
+    console.log(a)
+  }
+
+  if(i == 3){
+    break
+  }
+  console.log(i);
+} while (i < 5);
+
+
+
+
+
+
+
+                        </textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea id="console"  ></textarea>
+                    </div>
+                </div>
+
+                <br/>
+
+
+
+
+
+
+
+
+
+                <button type="button" class="btn btn-danger" id="graficar"   onclick="graphCode()" >Graficar AST</button>
+                <div id="sample">
+                    <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:500px"></div>
+                </div>
+
+            </div>
+        </div>
+        <div id="menu1" class="container tab-pane fade"><br>
+
+            <div id="example-table"></div>
+
+        </div>
+        <div id="menu2" class="container tab-pane fade"><br>
+
+            <div id="example-table2"></div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+
+<script src="Grammars/TsTranslatorGrammar/TsTranslatorGrammar.js"></script>
+<script src="Grammars/TsGrammar/TsGrammar.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="index.js"></script>
+
+
+</html>
+

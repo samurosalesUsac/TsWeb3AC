@@ -1,0 +1,4 @@
+Value : { return new Value(value) }
+CodeLine : { hash  }
+Label : { base -> hierarchy }
+Method : { base -> hierarchy }
