@@ -6,13 +6,11 @@
 // const { Function } = require('../FunctionManagement/Function')
 
 class ObjectClass extends Node {
-    constructor (access, name, list, extendsObj, line, column) {
+    constructor (name, list, line, column) {
         super(line, column)
         
-        this.access = access
         this.name = name
         this.list = list
-        this.extendsObj = extendsObj
 
         this.attributes = {} 
 

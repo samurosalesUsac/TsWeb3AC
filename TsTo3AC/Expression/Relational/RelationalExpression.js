@@ -24,9 +24,6 @@ class RelationalExpression extends Node {
                 this.parcialCode += this.right.parcialCode
             }
 
-            if(this.operator == '!='){
-                this.operator = '=!'
-            }
 
        if ((actualLeft.type == "number" || actualLeft.type == "boolean")
                 && (actualRight.type == "number" || actualRight.type == "boolean")) {

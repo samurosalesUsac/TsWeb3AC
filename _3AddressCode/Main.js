@@ -5,6 +5,8 @@ class Main  {
         this.mainList = new Array()
         this.labelList = {}
         this.methodList = {}
+        this.mainOptList = []
+        this.originalMainList = [... mainList]
 
        mainList.forEach(node =>{
            if(node instanceof Label){
@@ -54,5 +56,43 @@ class Main  {
             }
         }
     }
+
+    optCode = function (){
+        this.mainOptList = [... this.originalMainList]
+        this.optCode1()
+        console.log(this.originalMainList)
+        console.log(this.mainOptList)
+    }
+
+    optCode1 = function () {
+
+        let beg = -1
+        let gotoLabel = ''
+        let removeList = []
+
+        for(let index = 0 ; index < this.mainOptList.length ; index++){
+            let node = this.mainOptList[index]
+            if (node instanceof Goto) {
+                beg = index
+                gotoLabel = node.name
+
+                let auxIndex = index + 1
+
+                while (!(this.mainOptList[auxIndex] instanceof Label)) {
+                    auxIndex++
+                }
+
+                if (auxIndex != index + 1) {
+                    if (this.mainOptList[auxIndex].name === node.name) {
+                        this.mainOptList.splice(index, auxIndex - index)
+                    } else {
+                        this.mainOptList.splice(index + 1, auxIndex - index -1)
+                    }
+                }
+
+            }
+        }
+    }
+
 }
 

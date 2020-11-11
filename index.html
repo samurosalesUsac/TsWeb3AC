@@ -41,24 +41,24 @@
 
 
 
-    <!--    <script src="models/_3AddressCode/CodeLine/CodeLine.js"></script>-->
-    <!--    <script src="models/_3AddressCode/CodeLine/Expression.js"></script>-->
-    <!--    <script src="models/_3AddressCode/CodeLine/TemporalCall.js"></script>-->
-    <!--    <script src="models/_3AddressCode/CodeLine/Value.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Label/Goto.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Label/If.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Label/IfFalse.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Label/Label.js"></script>-->
-    <!--    <script src="models/_3AddressCode/MemoryAccess/HeapAccess.js"></script>-->
-    <!--    <script src="models/_3AddressCode/MemoryAccess/StackAccess.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Method/Call.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Method/Method.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Cycle.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Main.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Print/Print.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Method/Begin.js"></script>-->
-    <!--    <script src="models/_3AddressCode/Method/End.js"></script>-->
-    <!--    <script src="models/_3AddressCode/ErrorHandle/Error.js"></script>-->
+        <script src="_3AddressCode/CodeLine/CodeLine.js"></script>
+        <script src="_3AddressCode/CodeLine/Expression.js"></script>
+        <script src="_3AddressCode/CodeLine/TemporalCall.js"></script>
+        <script src="_3AddressCode/CodeLine/Value.js"></script>
+        <script src="_3AddressCode/Label/Goto.js"></script>
+        <script src="_3AddressCode/Label/If.js"></script>
+        <script src="_3AddressCode/Label/IfFalse.js"></script>
+        <script src="_3AddressCode/Label/Label.js"></script>
+        <script src="_3AddressCode/MemoryAccess/HeapAccess.js"></script>
+        <script src="_3AddressCode/MemoryAccess/StackAccess.js"></script>
+        <script src="_3AddressCode/Method/Call.js"></script>
+        <script src="_3AddressCode/Method/Method.js"></script>
+        <script src="_3AddressCode/Cycle.js"></script>
+        <script src="_3AddressCode/Main.js"></script>
+        <script src="_3AddressCode/Print/Print.js"></script>
+        <script src="_3AddressCode/Method/Begin.js"></script>
+        <script src="_3AddressCode/Method/End.js"></script>
+        <script src="_3AddressCode/ErrorHandle/Error.js"></script>
 
     <!--    <script src="Grammars/3ACode/_3ACode.js"></script>-->
 <!--    <script src="Grammars/TsGrammar/TsGrammar.js"></script>-->
@@ -130,11 +130,22 @@
     <script src="TsTo3AC/Statements/WhileSttmnt.js"></script>
     <script src="TsTo3AC/Statements/DoWhileSttmnt.js"></script>
     <script src="TsTo3AC/Statements/ContinueSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/SwitchSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/CaseSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/ForSttmnt.js"></script>
 
 
     <!--Exec Nodes-->
-
-
+    <script src="TsTo3AC/ObjectClassManagement/ObjectClass.js"></script>
+    <script src="TsTo3AC/FunctionManagement/FixedCode.js"></script>
+    <script src="TsTo3AC/VariableManagement/PostIncrease.js"></script>
+    <script src="TsTo3AC/VariableManagement/PreIncrease.js"></script>
+    <script src="TsTo3AC/VariableManagement/PreDecrease.js"></script>
+    <script src="TsTo3AC/ArrayManagement/ArrayClass.js"></script>
+    <script src="TsTo3AC/ArrayManagement/VectorialAccess.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Ternary.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Not.js"></script>
+    <script src="TsTo3AC/Expression/Arithmetical/Unary.js"></script>
 
 
 </head>
@@ -165,10 +176,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-danger" id="compilef"   onclick="CompileCode()" >Compilar</button>
+                        <button type="button" class="btn btn-danger" id="compilef"   onclick="CompileCode()" >Traducir</button>
                     </div>
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-danger"   onclick="translateCode()" >Traducir</button>
+                        <button type="button" class="btn btn-danger"   onclick="optCode()" >Optimizar</button>
                     </div>
                 </div>
 
@@ -178,31 +189,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <textarea id="editor"  >
-let i : number = 0;
-
-do {
-  i = i + 1;
-
-  let a : number = 0
-
-  while(a < 3){
-    a = a + 1
-    console.log(a)
-  }
-
-  if(i == 3){
-    break
-  }
-  console.log(i);
-} while (i < 5);
-
-
-
-
-
-
-
-                        </textarea>
+let a : number = 5 == 8 ? 6 : 7
+console.log(a)
+</textarea>
                     </div>
                     <div class="col-md-6">
                         <textarea id="console"  ></textarea>
@@ -242,6 +231,7 @@ do {
 
 </body>
 
+<script src="Grammars/3ACode/_3ACode.js"></script>
 <script src="Grammars/TsTranslatorGrammar/TsTranslatorGrammar.js"></script>
 <script src="Grammars/TsGrammar/TsGrammar.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

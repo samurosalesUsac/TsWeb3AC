@@ -7,9 +7,19 @@ class Addition extends Node {
         this.right = right
     }
 
+
     exec = function (scope) {
+
+        if(this.left instanceof Symbol && this.left.type == 'string'){
+            this.left = new Expression(this.left)
+        }
+        if(this.right instanceof Symbol && this.right.type == 'string'){
+            this.right = new Expression(this.right)
+        }
+
         let actualLeft = this.left.exec(scope)
         let actualRight = new Symbol()
+
 
         if (this.right instanceof Call) {
             if (this.left instanceof Call) {
@@ -60,39 +70,59 @@ class Addition extends Node {
 
         } else if (actualLeft.type == "string" || actualRight.type == "string") {
 
-            if (actualLeft.type != "string" || actualRight.type != "string") {
+            if(actualLeft.type == "number"){
 
-                let leftTemp
-                let rightTemp
 
-                if (actualLeft.type != "string") {
 
-                    leftTemp = this.castToString(actualLeft)
-                    rightTemp = actualRight.getValue()
+                this.setNewCode(`\n// number + string`)
 
-                } else {
+                let callString = new Call({name : `__call_concatString__`}, [actualLeft, actualRight])
+                let tag = callString.exec(this.scope)
+                this.setNewCode(callString.parcialCode)
 
-                    leftTemp = actualLeft.getValue()
-                    rightTemp = this.castToString(actualRight)
+                return new Symbol("string", tag.value, this.line, this.column)
 
-                }
+            }else if(actualRight.type == 'number'){
 
-                this.setNewCode(this.getNewTemporal + " = p;            // indice primer parameroto")
-                this.setNewCode(this.getNewTemporal + " = p + 1;            // indice segundo parameroto")
-                this.setNewCode("Stack[(int)" + this.getLastTemporal() + "]" + " = " + leftTemp + ";            // primer parameroto")
-                this.setNewCode("Stack[(int)" + this.getThisTemporal() + "]" + " = " + rightTemp + ";            // segundo parameroto")
-                this.setNewCode("p = p + 3;                 // 2parametros + return = 3")
-                this.setNewCode("call concat;")
-                this.setNewCode("p = p - 3;                 // 2parametros + return = 3")
-                this.setNewCode(this.getNewTemporal() + " = p + 3")
-                this.setNewCode(this.getNewTemporal() + " = Stack[(int) " + this.getLastTemporal() + " ];")
-                // this.cleanStack(3)
+                this.setNewCode(`\n// string + number`)
 
-                // this.concatCode()
-                return new Symbol("string", this.getThisTemporal())
+                let callString = new Call({name : `__call_concatString__`}, [actualLeft, actualRight])
+                let tag = callString.exec(this.scope)
+                this.setNewCode(callString.parcialCode)
 
+                return new Symbol("string", tag.value, this.line, this.column)
+
+            }else if(actualLeft.type == 'boolean'){
+
+                this.setNewCode(`\n// boolena + string`)
+
+                let callString = new Call({name : `__call_concatString__`}, [actualLeft,actualRight])
+                let tag = callString.exec(this.scope)
+                this.setNewCode(callString.parcialCode)
+
+                return new Symbol("string", tag.value, this.line, this.column)
+
+            }else if(actualRight.type == 'boolean'){
+
+                this.setNewCode(`\n// string + boolean`)
+
+                let callString = new Call({name : `__call_concatString__`}, [actualLeft, actualRight])
+                let tag = callString.exec(this.scope)
+                this.setNewCode(callString.parcialCode)
+
+                return new Symbol("string", tag.value, this.line, this.column)
+
+            }else if(actualLeft.type == 'string' && actualRight.type == 'string'){
+                this.setNewCode(`\n// string + string`)
+
+                let callString = new Call({name : `__call_concatString__`}, [actualLeft, actualRight])
+                let tag = callString.exec(this.scope)
+                this.setNewCode(callString.parcialCode)
+
+                return new Symbol("string", tag.value, this.line, this.column)
             }
 
+            return new Symbol("Error")
         } else if (actualLeft.type != "Error" && actualRight.type != "Error") {
 
             // this.setError(

@@ -74,6 +74,12 @@ function CompileCode () {
     // });
 }
 
+function optCode(){
+
+    let codeToOpt = this.getLines(10, undefined, webTsConsole.getValue())
+    let list = _3ACode.parse(codeToOpt)
+    list.optCode()
+}
 
 var $ = go.GraphObject.make;
 
@@ -124,5 +130,24 @@ graphCode = function () {
             { nodeDataArray: translation});
 }
 
+getLines = function (begin, end, text) {
+    let code = ''
+    vector = text.split('\n')
+
+    begin = begin == undefined ? 0 : begin
+    end = end == undefined ? vector.length : end
+    // theString
+
+
+
+    for(let i = begin ; i < end ; i++){
+        code += vector[i] + '\n'
+        if(i == 5){
+            alert(vector[i])
+        }
+    }
+
+    return code
+}
 
 

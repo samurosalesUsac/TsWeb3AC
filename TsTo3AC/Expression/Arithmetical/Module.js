@@ -25,7 +25,7 @@ class Module extends Node {
         if ((actualLeft.type == "number" || actualLeft.type == "boolean")
             && (actualRight.type == "number" || actualRight.type == "boolean")) {
 
-            this.setNewCode(this.getNewTemporal() + " = " + actualLeft.getValue() + " % " + actualRight.getValue() + ";")
+            this.setNewCode(`${this.getNewTemporal()} = fmod(${actualLeft.getValue()}, ${actualRight.getValue()});`)
 
             // this.concatCode()
             return new Symbol("number", this.getThisTemporal(), this.line, this.column)

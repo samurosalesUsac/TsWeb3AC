@@ -10,10 +10,12 @@ class Expression extends Node {
     exec = function(scope) {
         if(this.value instanceof Symbol ){
             if(this.value.type === 'string'){
-                this.value.getValue(scope)
+                let tag = this.value.getValue(scope)
                 this.parcialCode += this.value.getParcialCode()
+                let retValue = new Symbol('string', tag)
+                retValue.parcialCode += this.value.getParcialCode()
 
-                return this.value
+                return retValue
             }
 
 

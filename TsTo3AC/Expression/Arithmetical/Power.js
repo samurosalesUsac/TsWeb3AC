@@ -22,13 +22,14 @@ class Power extends Node {
         }
 
 
-        if ((actualLeft.type == "number" || actualLeft.type == "boolean")
-            && (actualRight.type == "number" || actualRight.type == "boolean")) {
+        if ((actualLeft.type == "number" )
+            && (actualRight.type == "number" )) {
 
-            this.setNewCode(this.getNewTemporal() + " = " + actualLeft.getValue() + " ** " + actualRight.getValue() + ";")
+            let callString = new Call({name : `__call_powerMethod__`}, [actualLeft, actualRight])
+            let tag = callString.exec(this.scope)
+            this.setNewCode(callString.parcialCode)
 
-            // this.concatCode()
-            return new Symbol("number", this.getThisTemporal(), this.line, this.column)
+            return new Symbol("number", tag.value, this.line, this.column)
         } else if (actualLeft.type != "Error" && actualRight.type != "Error") {
 
             // this.setError(

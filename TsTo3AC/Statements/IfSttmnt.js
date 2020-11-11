@@ -33,6 +33,7 @@ class IfSttmnt extends Node {
             this.list.exec(this.scope)
 
 
+            this.setNewCode(`\n// Sentencia ~if`)
             this.setNewCode("if (" + boolTemporal + " == 0) goto " + this.getThisLabel(1) + ";")
             this.setNewCode(this.list.getParcialCode())
             this.setNewCode("goto " + this.getThisLabel(2) + ";")
@@ -41,6 +42,7 @@ class IfSttmnt extends Node {
             let endIf = this.getNewLabel()
             if(this.elseIf){
 
+                this.setNewCode(`\n// Sentencia ~else`)
                 this.elseIf.exec(scope)
                 this.setNewCode(this.elseIf.getParcialCode())
 

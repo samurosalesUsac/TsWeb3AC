@@ -12,7 +12,9 @@ class PrintSttmnt extends Node {
      exec = function (scope) {
 
 
-        let retVal = this.value.exec(scope)
+         this.scope.root = scope
+
+        let retVal = this.value.exec(this.scope)
 
         if(retVal){
 
@@ -20,21 +22,31 @@ class PrintSttmnt extends Node {
 
           if(retVal.type === 'number' || retVal.type === 'let'){
 
-               this.setNewCode(`\nprintf(\"%d\", (int)${retVal.value});`)
+               this.setNewCode(`\nprintf(\"%f\", ${retVal.value});`)
 
-          }else if(retVal.type === 'digit'){
+          }else if(retVal.type === 'boolean'){
 
-               this.setNewCode(`printf(\"%d\", ${retVal.value});`)
+              this.setNewCode(`\n// imprimir booleanos`)
 
-          }else if(retVal.type === 'char'){
+              let callBoolean = new Call({name : `__call_printBoolean__`}, new Array(retVal))
+              callBoolean.exec(this.scope)
+              this.setNewCode(callBoolean.parcialCode)
+
+          }else if(retVal.type === 'string'){
+
+              this.setNewCode(`\n// imprimir string`)
+
+              let callString = new Call({name : `__call_printString__`}, new Array(new Symbol('string', retVal.value)))
+              callString.exec(this.scope)
+              this.setNewCode(callString.parcialCode)
                
-               this.setNewCode(`printf(\"%c\", ${retVal.value});`)
 
           }else{
                // boolean ans String
           }
 
-            this.setNewCode(`printf(\"\\n\");`)
+            this.setNewCode(`printf(\"%c\", 10);`)
+            // this.setNewCode(`printf(\"\\n\");`)
 
         }
 

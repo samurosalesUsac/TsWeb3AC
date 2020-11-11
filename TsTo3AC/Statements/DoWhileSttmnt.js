@@ -10,8 +10,10 @@ class DoWhileSttmnt extends  Node {
         this.list = list
 
     }
-    
+
     exec = function (scope) {
+
+        this.scope.root = scope;
 
         let breakAux = Node.breakTag
         let continueAux = Node.continueTag
@@ -22,23 +24,22 @@ class DoWhileSttmnt extends  Node {
         let label = this.getThisLabel()
         Node.continueTag = label
 
-        this.list.exec(scope)
+        this.list.exec(this.scope)
         this.setNewCode(this.list.getParcialCode())
 
-        this.value.exec(scope)
+        this.value.exec(this.scope)
         this.setNewCode(this.value.getParcialCode())
-        let boolTemporal =  this.getThisTemporal()
-        
+        let boolTemporal = this.getThisTemporal()
+
         this.setNewCode("if (" + boolTemporal + " == 1) goto " + label + ";")
-        
+
         this.setNewCode(`${Node.breakTag}: // Do While End Tag.`)
 
         Node.breakTag = breakAux
         Node.continueTag = continueAux
 
-     
 
-    }
+    };
 
 }
 

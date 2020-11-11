@@ -73,11 +73,11 @@ class Call extends Node {
 
                 this.setNewCode(`\n\t// parametro -> ${index + 1}`) // retorn en - length
 
-                let param = element.value.exec(scope)
+                let param = element.exec(scope)
                 newName += param.type + "_"
 
                 // let res = this.getThisTemporal()
-                this.setNewCode(element.value.getParcialCode())
+                this.setNewCode(element.getParcialCode())
                 this.setNewCode(`${this.getNewTemporal()} = p - ${index + 2};`) // quite un + 4
                 this.setNewCode(`Stack[(int)${this.getThisTemporal()}] = ${param.value};`)
 

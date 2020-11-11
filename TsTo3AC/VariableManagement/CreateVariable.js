@@ -7,6 +7,7 @@ class CreateVariable extends Node{
         this.type = type
         this.name = name
         this.value = value
+        this.newIndex = -1
         this.index = -1
     }
 
@@ -17,7 +18,7 @@ class CreateVariable extends Node{
         let retTemp = ''
 
 
-            this.setNewCode(`// Expresion para ${this.name}`)
+            this.setNewCode(`// Expresion para ~${this.name}`)
 
             let expValue = new Symbol()
             if(this.value){
@@ -27,33 +28,45 @@ class CreateVariable extends Node{
                 this.value.parcialCode = ''
             }else{
                 this.setNewCode(`${this.getNewTemporal()} = ${this.getDefVal()};`)
+                expValue.value = this.getThisTemporal()
             }
 
-            this.setNewCode(`// Apuntador hacia espacio en variable ${this.name}`)
+            this.setNewCode(`// Apuntador hacia espacio en variable ~${this.name}`)
 
+        if(expValue.type != this.type){
 
-        let index = this.scope.getNewIndex()
-        if(this.scope.root){
-            this.setNewCode(`${this.getNewTemporal()} = p + ${index };`)
-        }else{
-            this.setNewCode(`${this.getNewTemporal()} = p ${ (index - Node.globalOffset)  > 0 ? "+ " + (index - Node.globalOffset) : '- ' + ((index - Node.globalOffset)*-1) };`)
+            //error
+            this.parcialCode = ''
+            return new Symbol()
 
         }
 
+    if(!global){
+
+        this.newIndex = this.scope.getNewIndex()
+
+    }
+
+        if(this.scope.root){
+            this.setNewCode(`${this.getNewTemporal()} = p + ${this.newIndex };`)
+        }else{
+            this.setNewCode(`${this.getNewTemporal()} = p ${ (this.newIndex - Node.globalOffset)  > 0 ? "+ " + (this.newIndex - Node.globalOffset) : '- ' + ((this.newIndex - Node.globalOffset)*-1) };`)
+
+        }
 
         retTemp = this.getThisTemporal()
 
-            this.setNewCode(`// Asignando valor a variable ${this.name}`)
-            this.setNewCode(`Stack[(int)${this.getThisTemporal()}] = ${expValue.value};`)
+            this.setNewCode(`// Asignando valor a variable ~${this.name}`)
+            this.setNewCode(`Stack[(int)${retTemp}] = ${expValue.value};\n`)
 
             if(!addTo){
                 this.scope.varList[this.name] = {
-                    index : this.scope.getNewIndex(),
+                    index : this.newIndex,
                     type : this.type
                 }
             }else{
                 this.scope.varList[addTo + '.' + this.name] = {
-                    index : this.scope.getNewIndex(),
+                    index : this.newIndex,
                     type : this.type
                 }
             }
@@ -78,6 +91,11 @@ class CreateVariable extends Node{
             default :
                 return -1
         }
+    }
+
+    setIndex = function (){
+        this.newIndex = this.scope.getNewIndex()
+
     }
 
 

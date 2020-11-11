@@ -10,6 +10,8 @@
 number                      [0-9]+                 
 digit                       [0-9]+("."[0-9]+)+     
 label                       [L][0-9]+
+// beginV                      ["("][")"]["{"]
+// sqrBraquets                 ['['][^']']+ [']']
 
 id                          [_a-zA-Z][_a-zA-Z0-9ñÑ]*
 
@@ -17,32 +19,37 @@ id                          [_a-zA-Z][_a-zA-Z0-9ñÑ]*
 
 %%
 
-"#".*                /* skip comments */
-"#*"                  this.begin('comment');
-<comment>"*#"         this.popState();
+"//".*                /* skip comments */
+"/*"                  this.begin('comment');
+<comment>"*/"         this.popState();
 <comment>.            /* skip comment content*/
 
 
 
-"stack"                     return 'stack';
-"heap"                      return 'heap';
+"Stack"                     return 'stack';
+"Heap"                      return 'heap';
 
 "goto"                      return 'goto';
 "ifFalse"                   return 'ifFalse';
 "if"                        return 'if';
 
-"proc"                      return 'proc';
-"begin"                     return 'begin';
-"end"                       return 'end';
+"int"                        return 'intTag';
 
-"call"                      return 'call';
-"print"                     return 'print';
+"void"                      return 'proc';
+// {beginV}                     return 'begin';
+"}"                       return 'end';
+
+// "call"                      return 'call';
+"printf"                     return 'print';
 "end"                       return 'end';
+"return"                    return 'return';
 
 "error"                     return 'error';
 
 
 "\"%d\""                     return 'dd';
+"\"%f\""                     return 'dd';
+"\"%.2f\""                     return 'dd';
 "\"%i\""                     return 'ee';
 "\"%c\""                     return 'cc';
 
@@ -92,8 +99,13 @@ id                          [_a-zA-Z][_a-zA-Z0-9ñÑ]*
 "@^"                         return 'at^';
 "@%"                         return 'at%';
 
+// "[(int)"                         return 'leftSquareBraquet';
 "["                         return 'leftSquareBraquet';
 "]"                         return 'rightSquareBraquet';
+
+"{"                         return 'leftCurlBraquet';
+// "}"                         return 'rightCurlBraquet';
+
 
 "("                         return 'leftParen';
 ")"                         return 'rightParen';
@@ -260,36 +272,49 @@ LineOfCode
     | ifFalse   leftParen Expression rightParen goto label semicolon
         { $$ = new IfFalse($3, $6); }
 
-    | stack leftSquareBraquet Value rightSquareBraquet equal Value semicolon
+    | stack leftSquareBraquet Expression rightSquareBraquet equal Expression semicolon
         { $$ = new SetStack ($3, $6); }
-    | heap  leftSquareBraquet Value rightSquareBraquet equal Value semicolon
+    | heap  leftSquareBraquet Expression rightSquareBraquet equal Expression semicolon
         { $$ = new SetHeap  ($3, $6); }
 
-    | id equal stack    leftSquareBraquet Value rightSquareBraquet semicolon
+    | id equal stack    leftSquareBraquet Expression rightSquareBraquet semicolon
         { $$ = new GetStack ($1, $5); }
-    | id equal heap     leftSquareBraquet Value rightSquareBraquet semicolon
+    | id equal heap     leftSquareBraquet Expression rightSquareBraquet semicolon
         { $$ = new GetHeap  ($1, $5); }
 
-    | print leftParen cc comma Value rightParen semicolon
+    | print leftParen cc comma Expression rightParen semicolon
         { $$ = new Print($3, $5); }
-    | print leftParen ee comma Value rightParen semicolon
+    | print leftParen ee comma Expression rightParen semicolon
         { $$ = new Print($3, $5); }
-    | print leftParen dd comma Value rightParen semicolon
+    | print leftParen dd comma Expression rightParen semicolon
         { $$ = new Print($3, $5); }
 
-    | call id semicolon
+    | id leftParen rightParen semicolon
         { $$ = new CodeCall($2); }
 
     | label colon
         { $$ = new Label($1); }
 
-    | proc id begin
+    | proc id leftParen rightParen leftCurlBraquet
         {$$= new Begin($2);}
     | end
         {$$= new End();}
+    | return semicolon
 
-    | error Value colon Value
-        {$$ = new Error($2, $4)}
+    | error semicolon
+        {
+            console.log({
+            type : 'Sintactico',
+            description : $error,
+            line : @1.first_line, 
+            column : @1.first_column});
+
+            // ErrorList = ErrorList.concat({
+            // type : 'Sintactico',
+            // description : $1,
+            // line : @1.first_line, 
+            // column : @1.first_column});
+        }
     ;
 
 
@@ -322,7 +347,7 @@ Expression
     | Value 'module'           Value
         { $$ = new CodeExpression($2, $1, $3); }
 
-    | Value 'at+' Value
+    // | 'minus' Value
 
     | Value
         { $$ = $1; }
@@ -333,6 +358,8 @@ Value
         { $$ = new Value($1);           }
     | id
         { $$ = new TemporalCall($1);    }
+    | minus Value
+    | leftParen intTag rightParen Value
     ;
 
 

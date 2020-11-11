@@ -33,7 +33,19 @@ class AssignVariable extends Node{
         retTemp = this.getThisTemporal()
 
             this.setNewCode(`// Asignando valor a variable ${this.id.name}`)
+        if(!variable.heap){
             this.setNewCode(`Stack[(int)${variable.index}] = ${expValue.value};`)
+        }else{
+            this.setNewCode(`Heap[(int)${variable.index}] = ${expValue.value};`)
+        }
+
+        if(variable.type != expValue.type){
+
+            //error
+            this.parcialCode = ''
+            return new Symbol()
+
+        }
 
             // if(!addTo){
             //     this.scope.varList[this.name] = {

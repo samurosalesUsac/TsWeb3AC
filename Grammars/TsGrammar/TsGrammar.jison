@@ -216,9 +216,9 @@ id                          [_a-zA-Z][_a-zA-Z0-9ñÑ]*
 
 InitMain 
     : BodyList endOfFile
-        {console.log($1); return new MainScope(new Body($1));}
+        {console.log($1); return new MainScope($1);}
     | endOfFile
-        {return new MainScope(new Body(new Array()));}
+        {return new MainScope(new Array());}
     | error
         {
             ErrorList = ErrorList.concat({
@@ -269,7 +269,7 @@ VariableExpression
     : equal Expression
         {$$ = $2;}
     |
-        {$$ = new Symbol();}
+        {$$ = undefined;}
     ;
 
 VariableDec
@@ -283,12 +283,16 @@ VariableDec
 
 ObjectList
     : leftCrlBrkt rightCrlBrkt
+        {$$ = new Array();}
     | leftCrlBrkt ObjectAttList rightCrlBrkt
+        {$$ = $2;}
     ;
 
 ObjectAttList
     : ObjectAttList comma id colon VariableType
+        {$$ = $1.concat(new CreateVariable($3, $5, undefined, @1.first_line, @1.first_column ));}
     | id colon VariableType
+        {$$ = [new CreateVariable($1, $3, undefined, @1.first_line, @1.first_column )];}
     ;
 
 BodyElement 
@@ -298,6 +302,7 @@ BodyElement
         {$$ = new AssignVariable($1, $3, @1.first_line, @1.first_column);}
 
     | type id equal ObjectList SemicolonE
+        {$$ = new ObjectClass($2, $4, @1.first_line, @1.first_column);}
         
     | IfStatement 
     | WhileStatement 
@@ -315,7 +320,7 @@ BodyElement
         {$$ = new ReturnSttmnt($2, @1.first_line, @1.first_column)}
     | return semicolon
         {$$ = new ReturnSttmnt(undefined, @1.first_line, @1.first_column)}
-  | continue SemicolonE
+    | continue SemicolonE
         { $$ = new ContinueSttmnt(@1.first_line, @1.first_column)}
 
 
@@ -345,13 +350,16 @@ IdCall
     | IdCall leftPar ParameterList rightPar
         {$$ = new Call($1, $3, @1.first_line, @1.first_column);}
     | IdCall leftSqrBrkt Expression rightSqrBrkt
+        {$$ = new VectorialAccess($1, $3, @1.first_line, @1.first_column);}
     | IdCall dot id
 
     | id
         {$$ = new GetId ($1, @1.first_line, @1.first_column); }    
 
     | id increase
+        {$$ = new PostIncrease(new GetId ($1, @1.first_line, @1.first_column),@1.first_line, @1.first_column);}
     | id decrease
+        {$$ = new PostDecrease(new GetId ($1, @1.first_line, @1.first_column),@1.first_line, @1.first_column);}
     ; 
 
 
@@ -412,6 +420,7 @@ Expression
 ExpressionOp
     : 
     ExpressionOp questionMark     ExpressionOp colon ExpressionOp
+        {$$ = new Ternary($1, $3, $5, @2.first_line, @2.first_column);}
 //logical
     | ExpressionOp or               ExpressionOp         
         {$$ = new OrOp($1, $3, @2.first_line, @2.first_column); }
@@ -419,6 +428,7 @@ ExpressionOp
         {$$ = new AndOp($1, $3, @2.first_line, @2.first_column); }
 
     | not ExpressionOp
+        {$$ = new Not($2, @1.first_line, @1.first_column);}
 
 //relacional
     | ExpressionOp equality         ExpressionOp
@@ -462,13 +472,17 @@ ExpressionOp
         {$$ = $2;}
     
     | leftSqrBrkt ExpressionList rightSqrBrkt
+        {$$ = new ArrayClass($2, @1.first_line, @1.first_column);}
 
     | increase id %prec preincrease
+        {$$ = new PreIncrease(new GetId ($2, @1.first_line, @1.first_column),@1.first_line, @1.first_column);}
     | decrease id %prec predecrease
+        {$$ = new PreDecrease(new GetId ($2, @1.first_line, @1.first_column),@1.first_line, @1.first_column);}
 
 
 
     | minus ExpressionOp %prec uMinus
+        {$$ = new Unary($2, @1.first_line, @1.first_column);}
 
     | IdAssign equal ExpressionOp
         {$$ = new AssignVariable($1, $3, @1.first_line, @1.first_column);}
@@ -491,13 +505,16 @@ ExpressionOp
 
 ExpressionList
     : ExpressionList comma Expression
+        {$$ = $1.concat($3);}
     | Expression
+        {$$ = [$1];}
     ;
 
 
 
 IdAssign
     : IdAssign leftSqrBrkt Expression rightSqrBrkt 
+        {$$ = new VectorialAccess($1, $3, @1.first_line, @1.first_column);}
     | IdAssign dot id
     | IdAssign leftPar rightPar
         {$$ = new Call($1, new Array(), @1.first_line, @1.first_column);}
@@ -506,7 +523,9 @@ IdAssign
     | id
         {$$ = new GetId ($1, @1.first_line, @1.first_column); }    
     | id increase
+        {$$ = new PostIncrease(new GetId ($1, @1.first_line, @1.first_column),@1.first_line, @1.first_column);}
     | id decrease
+        {$$ = new PostDecrease(new GetId ($1, @1.first_line, @1.first_column),@1.first_line, @1.first_column);}
     ;
 
 
@@ -556,27 +575,34 @@ ParameterList
 
     SwitchStatement
         : switch leftPar Expression rightPar leftCrlBrkt CaseStatementList_  rightCrlBrkt 
+            {$$ = new SwitchSttmnt($3, $6, @1.first_line, @1.first_column);}
         ;
 
     CaseStatementList_
         : CaseStatementList
-        |
+        | {$$ = new Body([]);}
         ;
 
     CaseStatementList
         : CaseStatementList CaseStatement
+            {$$ = $1.concat($2);}
         | CaseStatementList DefaultStatement
+            {$$ = $1.concat($2);}
         | CaseStatement
+            {$$ = [$1];}
         | DefaultStatement
+            {$$ = [$1];}
         ;
 
 
     CaseStatement
         : case Expression colon FunctionBody
+            {$$ = new CaseSttmnt($2, $4, @1.first_line, @1.first_column);}
         ;
 
     DefaultStatement
         : default colon FunctionBody
+            {$$ = new CaseSttmnt(undefined, $3, @1.first_line, @1.first_column);}
         ;
   
 
@@ -590,6 +616,7 @@ ParameterList
         rightPar
 
         leftCrlBrkt FunctionBody rightCrlBrkt
+        {$$ = new ForSttmnt($3, $5, $7, $10, @1.first_line, @1.first_column);}
         | for leftPar let      id in Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
         | for leftPar const    id in Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
         | for leftPar let      id of Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
@@ -599,6 +626,9 @@ ParameterList
 
     ForDecOr
         : let   id TypeAttribute VariableExpression
+            {$$ = new CreateVariable($2, $3, $4, @1.first_line, @1.first_column )}
+        | id equal Expression
+            {$$ = new AssignVariable(new GetId ($1, @1.first_line, @1.first_column),@1.first_line, $3, @1.first_line, @1.first_column);}
         |
         ;
 
