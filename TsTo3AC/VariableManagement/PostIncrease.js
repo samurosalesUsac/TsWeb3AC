@@ -16,6 +16,11 @@ class PostIncrease extends Node{
             this.setNewCode(`Stack[(int)${valResult.index}] = ${valResult.value} + 1;`)
         }else{
             //error
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `variable debe se numerica PostIncrease`,
+                line : this.line,
+                column : this.column});
         }
 
 

@@ -147,7 +147,7 @@ id                          [_a-zA-Z][_a-zA-Z0-9ñÑ]*
 "true"                      return 'true';
 "false"                     return 'false';
 
-{id}                        return 'id';
+{id}                        yytext = yytext.toLowerCase(); return 'id';
 
 \s+                         /* skip whitespace */
 
@@ -167,7 +167,7 @@ id                          [_a-zA-Z][_a-zA-Z0-9ñÑ]*
 
 /lex
 
-
+%options case-insensitive
 %{
 
 
@@ -274,10 +274,11 @@ VariableExpression
 
 VariableDec
     : VariableDec comma id TypeAttribute VariableExpression
-        
+        { $1.list.push(new CreateVariable($3, $4, $5, @1.first_line, @1.first_column)); $$ = $1;}        
     | let   id TypeAttribute VariableExpression
-        {$$ = new CreateVariable($2, $3, $4, @1.first_line, @1.first_column )}
+        {$$ = new Let([new CreateVariable($2, $3, $4, @1.first_line, @1.first_column)],  @1.first_line, @1.first_column);}
     | const id TypeAttribute VariableExpression
+        {$$ = new Let([new CreateVariable($2, $3, $4, @1.first_line, @1.first_column)],  @1.first_line, @1.first_column);}
     ;
 
 
@@ -290,9 +291,9 @@ ObjectList
 
 ObjectAttList
     : ObjectAttList comma id colon VariableType
-        {$$ = $1.concat(new CreateVariable($3, $5, undefined, @1.first_line, @1.first_column ));}
+        {$$ = $1.concat(new CreateVariable($3, $5, undefined, @1.first_line, @1.first_column));}
     | id colon VariableType
-        {$$ = [new CreateVariable($1, $3, undefined, @1.first_line, @1.first_column )];}
+        {$$ = [new CreateVariable($1, $3, undefined, @1.first_line, @1.first_column)];}
     ;
 
 BodyElement 
@@ -310,7 +311,7 @@ BodyElement
     | ForStatement
     | SwitchStatement
 
-    | print leftPar Expression rightPar SemicolonE
+    | print leftPar ExpressionList rightPar SemicolonE
         {$$ = new PrintSttmnt($3, @1.first_line, @1.first_column);}
     // | GraficarTs leftPar rightPar SemicolonE
 
@@ -352,7 +353,7 @@ IdCall
     | IdCall leftSqrBrkt Expression rightSqrBrkt
         {$$ = new VectorialAccess($1, $3, @1.first_line, @1.first_column);}
     | IdCall dot id
-
+        {$$ = new ObjectAccess($1, $3, @1.first_line, @1.first_column);}
     | id
         {$$ = new GetId ($1, @1.first_line, @1.first_column); }    
 
@@ -393,7 +394,7 @@ VariableType
     | string SizeList_
         {$$ = $1 + $2;}
     | void          
-        {$$ = $1 + $2;}
+        {$$ = $1;}
     | boolean SizeList_
         {$$ = $1 + $2;}
     | id SizeList_
@@ -516,6 +517,7 @@ IdAssign
     : IdAssign leftSqrBrkt Expression rightSqrBrkt 
         {$$ = new VectorialAccess($1, $3, @1.first_line, @1.first_column);}
     | IdAssign dot id
+        {$$ = new ObjectAccess($1, $3, @1.first_line, @1.first_column);}
     | IdAssign leftPar rightPar
         {$$ = new Call($1, new Array(), @1.first_line, @1.first_column);}
     | IdAssign leftPar ParameterList rightPar
@@ -617,12 +619,17 @@ ParameterList
 
         leftCrlBrkt FunctionBody rightCrlBrkt
         {$$ = new ForSttmnt($3, $5, $7, $10, @1.first_line, @1.first_column);}
-        | for leftPar let      id in Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
-        | for leftPar const    id in Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
-        | for leftPar let      id of Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
-        | for leftPar const    id of Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
+        | for leftPar let      id TypeAttribute in Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
+            {$$ = new ForInSttmnt(new CreateVariable($4, $5, undefined, @1.first_line, @1.first_column), $7, $10, @1.first_line, @1.first_column);}
+        | for leftPar const    id TypeAttribute in Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
+            {$$ = new ForInSttmnt(new CreateVariable($4, $5, undefined, @1.first_line, @1.first_column), $7, $10, @1.first_line, @1.first_column);}
+        | for leftPar let      id TypeAttribute of Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
+            {$$ = new ForOfSttmnt(new CreateVariable($4, $5, undefined, @1.first_line, @1.first_column), $7, $10, @1.first_line, @1.first_column);}
+        | for leftPar const    id TypeAttribute of Expression  rightPar leftCrlBrkt FunctionBody rightCrlBrkt
+            {$$ = new ForOfSttmnt(new CreateVariable($4, $5, undefined, @1.first_line, @1.first_column), $7, $10, @1.first_line, @1.first_column);}
         ;
 
+        // {$$ = new CreateVariable($2, $3, $4, @1.first_line, @1.first_column )}
 
     ForDecOr
         : let   id TypeAttribute VariableExpression

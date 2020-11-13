@@ -36,6 +36,11 @@ class CreateVariable extends Node{
         if(expValue.type != this.type){
 
             //error
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `tipo no coinside para CREAR a variable ${this.name}`,
+                line : this.line,
+                column : this.column});
             this.parcialCode = ''
             return new Symbol()
 
@@ -93,8 +98,12 @@ class CreateVariable extends Node{
         }
     }
 
-    setIndex = function (){
-        this.newIndex = this.scope.getNewIndex()
+    setIndex = function (scope){
+        this.newIndex = scope.getNewIndex()
+        scope.varList[this.name] = {
+            index : this.newIndex,
+            type : this.type
+        }
 
     }
 

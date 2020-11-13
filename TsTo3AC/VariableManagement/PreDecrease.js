@@ -18,6 +18,11 @@ class PreDecrease extends Node{
             valResult.value = this.getThisTemporal()
         }else{
             //error
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `variable debe se numerica PreDecrease`,
+                line : this.line,
+                column : this.column});
         }
 
 

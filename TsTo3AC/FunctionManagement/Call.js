@@ -14,6 +14,81 @@ class Call extends Node {
 
     exec = function (scope) {
 
+        this.scope.root = scope
+
+        if(this.name instanceof ObjectAccess){
+
+            let idValue = this.name.id.exec(this.scope)
+            if(idValue.type == 'string'){
+                if(this.name.attribute == 'concat'){
+                    if(this.parameters.length == 1){
+
+                        this.setNewCode(this.name.id.parcialCode)
+
+                        let seconfPar = this.parameters[0].exec(this.scope)
+                        this.setNewCode(this.parameters[0].parcialCode)
+
+                        let newParam = [idValue, seconfPar]
+                        let callString = new Call({name : `__call_concatString__`}, newParam)
+                        let tag = callString.exec(this.scope)
+                        this.setNewCode(callString.parcialCode)
+
+                        return new Symbol("string", tag.value, this.line, this.column)
+                    }
+                }
+                if(this.name.attribute == 'touppercase'){
+                    if(this.parameters.length == 0){
+                        this.setNewCode(this.name.id.parcialCode)
+                        let newParam = [idValue]
+                        let callString = new Call({name : `__call_stringToUpperCase__`}, newParam)
+                        let tag = callString.exec(this.scope)
+                        this.setNewCode(callString.parcialCode)
+
+                        return new Symbol("string", tag.value, this.line, this.column)
+                    }
+                }
+                if(this.name.attribute == 'tolowercase'){
+                    if(this.parameters.length == 0){
+                        this.setNewCode(this.name.id.parcialCode)
+                        let newParam = [idValue]
+                        let callString = new Call({name : `__call_stringToLowerCase__`}, newParam)
+                        let tag = callString.exec(this.scope)
+                        this.setNewCode(callString.parcialCode)
+
+                        return new Symbol("string", tag.value, this.line, this.column)
+                    }
+                }
+
+                if(this.name.attribute == 'charat'){
+                    if(this.parameters.length == 1){
+                        idValue.parcialCode = this.name.id.parcialCode
+                        // let newParam = [idValu]
+                        // let callString = new Call({name : `__call_stringToLowerCase__`}, newParam)
+                        // let tag = callString.exec(this.scope)
+                        // this.setNewCode(callString.parcialCode)
+
+
+                        let getChar = new VectorialAccess(idValue,this.parameters[0], this.line, this.column)
+                        let aCharResult = getChar.exec(this.scope)
+                        this.setNewCode(getChar.parcialCode)
+
+                        let index = this.getNewTemporal()
+                        this.setNewCode(`${index} = h;`)
+                        this.setNewCode(`Heap[(int) ${index}] = 1;`)
+                        this.setNewCode(`${this.getNewTemporal()} = ${index} + 1;`)
+                        this.setNewCode(`Heap[(int) ${this.getThisTemporal()}] = ${aCharResult.value};`)
+                        this.setNewCode(`${this.getThisTemporal()} = ${this.getThisTemporal()} + 1;`)
+                        this.setNewCode(`Heap[(int) ${this.getThisTemporal()}] = -1;`)
+                        this.setNewCode(`${this.getThisTemporal()} = ${this.getThisTemporal()} + 1;`)
+                        this.setNewCode(`h = ${this.getThisTemporal()};`)
+
+                        return new Symbol("string", index, this.line, this.column)
+                    }
+                }
+            }
+
+            return new Symbol()
+        }
 
         this.scope = new Scope(scope.getRootScope())
         this.scope.obj = scope.getRootScope().obj
@@ -21,7 +96,7 @@ class Call extends Node {
         if (this.obj) {
 
             let id = new GetId(this.obj)
-            var idValue = id.exec(scope)
+            var idValue = id.exec(this.scope)
             this.parcialCode += id.parcialCode
 
             var actualObj = idValue.type
@@ -33,7 +108,11 @@ class Call extends Node {
 
         let actualFunction = Scope.functions[`${this.name.name}_`]
         if (!actualFunction) {
-            this.addError('funcion no encontrada. nombre o numero de parametros incorrectos')
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `funcion no encontrada ${this.name.name}`,
+                line : this.line,
+                column : this.column});
             return
         }
 
@@ -100,7 +179,7 @@ class Call extends Node {
 
         let callName = `${this.name.name}_${newName}`
 
-        this.setNewCode(`\n${callName}();\n`)
+        this.setNewCode(`\n${callName.replace(/\[]/gm, "")}();\n`)
 
         this.setNewCode(`${this.getNewTemporal()} = p - 1;`)
 

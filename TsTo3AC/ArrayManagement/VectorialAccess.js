@@ -1,7 +1,7 @@
 
 class VectorialAccess extends Node{
     constructor(id, place, line, column) {
-        super(line. column);
+        super(line. column)
         this.place = place
         this.id = id
     }
@@ -19,6 +19,8 @@ class VectorialAccess extends Node{
 
                 this.setNewCode(`\n// acceso a ${placeExp.value}\n`)
                 this.setNewCode(this.id.parcialCode)
+                this.setNewCode(this.place.parcialCode)
+
                 let index = this.getNewTemporal()
                 this.setNewCode(`${index} = ${idValue.value};`)
 
@@ -44,6 +46,12 @@ class VectorialAccess extends Node{
                 return retVal
 
             }
+        }else {
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `variable no vectorial`,
+                line : this.line,
+                column : this.column});
         }
 
         return new Symbol()

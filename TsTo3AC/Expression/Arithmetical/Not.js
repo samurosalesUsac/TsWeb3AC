@@ -16,7 +16,15 @@ class Not extends Node{
             this.setNewCode(ternaryOp.parcialCode)
 
             return new Symbol('boolean', terResult.value )
+
+        }else{
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `no se puede realizar Not '!' de una variable no booleana`,
+                line : this.line,
+                column : this.column});
+            return new Symbol("Error")
         }
-        return  new Symbol()
+        return new Symbol("Error")
     }
 }

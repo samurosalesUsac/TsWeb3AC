@@ -1,5 +1,5 @@
 
-class postDecrease extends Node{
+class PostDecrease extends Node{
     constructor(id, line, column) {
         super(line, column)
         this.id = id
@@ -16,6 +16,11 @@ class postDecrease extends Node{
             this.setNewCode(`Stack[(int)${valResult.index}] = ${valResult.value} - 1;`)
         }else{
             //error
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `variable debe se numerica PostDecrease`,
+                line : this.line,
+                column : this.column});
         }
 
 

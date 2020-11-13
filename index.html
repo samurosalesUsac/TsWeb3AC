@@ -60,6 +60,9 @@
         <script src="_3AddressCode/Method/End.js"></script>
         <script src="_3AddressCode/ErrorHandle/Error.js"></script>
 
+
+
+
     <!--    <script src="Grammars/3ACode/_3ACode.js"></script>-->
 <!--    <script src="Grammars/TsGrammar/TsGrammar.js"></script>-->
 
@@ -101,6 +104,7 @@
     <script src="TsTo3AC/Body.js"></script>
     <script src="TsTo3AC/MainScope.js"></script>
 
+    <script src="TsTo3AC/ObjectClassManagement/ObjectAccess.js"></script>
     <script src="TsTo3AC/FunctionManagement/Call.js"></script>
     <script src="TsTo3AC/FunctionManagement/Function.js"></script>
     <script src="TsTo3AC/FunctionManagement/ParameterValue.js"></script>
@@ -133,12 +137,15 @@
     <script src="TsTo3AC/Statements/SwitchSttmnt.js"></script>
     <script src="TsTo3AC/Statements/CaseSttmnt.js"></script>
     <script src="TsTo3AC/Statements/ForSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/ForInSttmnt.js"></script>
+    <script src="TsTo3AC/Statements/ForOfSttmnt.js"></script>
 
 
     <!--Exec Nodes-->
     <script src="TsTo3AC/ObjectClassManagement/ObjectClass.js"></script>
     <script src="TsTo3AC/FunctionManagement/FixedCode.js"></script>
     <script src="TsTo3AC/VariableManagement/PostIncrease.js"></script>
+    <script src="TsTo3AC/VariableManagement/PostDecrease.js"></script>
     <script src="TsTo3AC/VariableManagement/PreIncrease.js"></script>
     <script src="TsTo3AC/VariableManagement/PreDecrease.js"></script>
     <script src="TsTo3AC/ArrayManagement/ArrayClass.js"></script>
@@ -146,7 +153,11 @@
     <script src="TsTo3AC/Expression/Arithmetical/Ternary.js"></script>
     <script src="TsTo3AC/Expression/Arithmetical/Not.js"></script>
     <script src="TsTo3AC/Expression/Arithmetical/Unary.js"></script>
+    <script src="TsTo3AC/VariableManagement/Let.js"></script>
+    <script src="TsTo3AC/VariableManagement/Const.js"></script>
 
+    <link rel="stylesheet" href="public/dist/css/tabulator.css">
+    <script src="public/dist/js/tabulator.js"></script>
 
 </head>
 <body>
@@ -189,8 +200,20 @@
                 <div class="row">
                     <div class="col-md-6">
                         <textarea id="editor"  >
-let a : number = 5 == 8 ? 6 : 7
-console.log(a)
+
+ function hanoi( discos:number, origen:number,  auxiliar:number,  destino:number):string {
+ let result:string = "r";
+ if (discos == 1) {
+	 result = result + (origen + destino);
+  } else {
+    // result = result + hanoi(discos - 1, origen, destino, auxiliar);
+     // result = result + (origen + destino);
+     // result = result + hanoi(discos - 1, auxiliar, origen, destino);
+  }
+        return result;
+    }
+
+    console.log(hanoi(4,1,5,3));  //648648648648648
 </textarea>
                     </div>
                     <div class="col-md-6">

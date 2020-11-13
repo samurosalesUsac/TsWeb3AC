@@ -13,7 +13,14 @@ class Unary extends Node{
             this.setNewCode(`${this.getNewTemporal()} = 0 - ${newExp.getValue()};`)
 
             return new Symbol('number',  this.getThisTemporal())
+        }else{
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `un valor no numerico no puede ser negativo`,
+                line : this.line,
+                column : this.column});
+            return new Symbol("Error")
         }
-        return  new Symbol()
+        return  new Symbol("Error")
     }
 }

@@ -32,17 +32,17 @@ class Power extends Node {
             return new Symbol("number", tag.value, this.line, this.column)
         } else if (actualLeft.type != "Error" && actualRight.type != "Error") {
 
-            // this.setError(
-            //     "los tipos de dato : "
-            //     + actualLeft.type + " y " + actualRight.type +
-            //     "no son operables por el operador: " + this.operator)
-
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `Error en potencia`,
+                line : this.line,
+                column : this.column});
             return new Symbol("Error")
 
         }
 
 
         // this.concatCode()
-        return new Symbol()
+        return new Symbol("Error")
     }
 }

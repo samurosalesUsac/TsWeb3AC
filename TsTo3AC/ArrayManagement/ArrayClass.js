@@ -39,6 +39,11 @@ class ArrayClass extends Node{
            return new Symbol(newArray[0].type + '[]', initTag)
        }else{
            // error no homongeneo
+           ErrorList = ErrorList.concat({
+               type : 'Semantico',
+               description : `Vector con atributos de diferente tipo`,
+               line : this.line,
+               column : this.column});
        }
         return new Symbol()
    }

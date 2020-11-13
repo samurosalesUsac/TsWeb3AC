@@ -93,15 +93,14 @@ class AndOp extends Node {
 
         } else if (actualLeft.type != "Error" && actualRight.type != "Error") {
 
-            // this.setError(
-            //     "los tipos de dato : "
-            //     + actualLeft.type + " y " + actualRight.type +
-            //     "no son operables por el operador: " + this.operator)
-            //
-            // return new Symbol("Error")
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `Error en And`,
+                line : this.line,
+                column : this.column});
 
         }
 
-        return new Symbol()
+        return new Symbol("Error")
     }
 }

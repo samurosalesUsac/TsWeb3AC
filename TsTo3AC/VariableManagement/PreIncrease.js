@@ -18,6 +18,11 @@ class PreIncrease extends Node{
             valResult.value = this.getThisTemporal()
         }else{
             //error
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `variable debe se numerica PreIncrease`,
+                line : this.line,
+                column : this.column});
         }
 
 

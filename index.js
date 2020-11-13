@@ -63,11 +63,11 @@ function CompileCode () {
 
 
 
-    // let table = new Tabulator("#example-table", {
-    //     data:ErrorList, //assign data to table
-    //     autoColumns:true, //create columns from data field names
-    // });
-    //
+    let table = new Tabulator("#example-table", {
+        data:ErrorList, //assign data to table
+        autoColumns:true, //create columns from data field names
+    });
+
     // let table2 = new Tabulator("#example-table2", {
     //     data:TableList, //assign data to table
     //     autoColumns:true, //create columns from data field names
@@ -76,7 +76,7 @@ function CompileCode () {
 
 function optCode(){
 
-    let codeToOpt = this.getLines(10, undefined, webTsConsole.getValue())
+    let codeToOpt = this.getLines(658, undefined, webTsConsole.getValue())
     let list = _3ACode.parse(codeToOpt)
     list.optCode()
 }

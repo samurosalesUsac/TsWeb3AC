@@ -12,7 +12,9 @@ class GetId extends Node {
         let variable = scope.getVariable(this.name)
         let globalVariable = scope.getGlobalVariable(this.name)
 
-
+        if(variable){
+            globalVariable = false
+        }
 
         if(globalVariable){
 

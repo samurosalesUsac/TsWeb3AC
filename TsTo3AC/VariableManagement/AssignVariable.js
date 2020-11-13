@@ -42,6 +42,12 @@ class AssignVariable extends Node{
         if(variable.type != expValue.type){
 
             //error
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `tipo no coinside para ASIGNAR a variciable ${this.id.name}`,
+                line : this.line,
+                column : this.column});
+
             this.parcialCode = ''
             return new Symbol()
 

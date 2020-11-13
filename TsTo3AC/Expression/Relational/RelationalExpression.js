@@ -43,17 +43,18 @@ class RelationalExpression extends Node {
 
         } else if (actualLeft.type != "Error" && actualRight.type != "Error") {
 
-            // this.setError(
-            //     "los tipos de dato : "
-            //     + actualLeft.type + " y " + actualRight.type +
-            //     "no son operables por el operador: " + this.operator)
+           ErrorList = ErrorList.concat({
+               type : 'Semantico',
+               description : `Error en operacion relacional ${this.operator}`,
+               line : this.line,
+               column : this.column});
 
             return new Symbol("Error")
 
 
         }
 
-        return new Symbol()
+        return new Symbol("Error")
     }
 
 }

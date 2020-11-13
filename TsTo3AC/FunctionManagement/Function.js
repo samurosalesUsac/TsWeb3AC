@@ -20,11 +20,13 @@ class Function extends Node {
         Node.funcEndLab = endTag
 
         this.setNewCode(`\nvoid ${this.name} (){\n`)
-    
-            
+
+        // this.scope = new Scope(scope)
+
         this.parameters.forEach((element, index) => {
             this.scope.varList[element.name] = {
                 index : - (index + 2) ,
+                // index : index,
                 type : element.type
             }
         });

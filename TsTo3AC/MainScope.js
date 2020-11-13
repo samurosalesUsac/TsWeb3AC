@@ -14,8 +14,8 @@ class MainScope extends Node {
         })
 
         this.list.forEach((element, index) => {
-            if (element instanceof CreateVariable) {
-                this.list[index].setIndex()
+            if (element instanceof Let || element instanceof Const) {
+                this.list[index].setIndex(this.scope)
             }
         })
 
@@ -29,8 +29,8 @@ class MainScope extends Node {
 
         let mainCode = ''
         for(let index = 0; index < this.list.length; index++ ){
-            if(this.list[index] instanceof CreateVariable){
-                this.list[index].exec(this.scope,undefined, undefined,true)
+            if(this.list[index] instanceof Let ||this.list[index] instanceof Const){
+                this.list[index].exec(this.scope,true)
                 mainCode += this.list[index].parcialCode
             }else{
                 this.list[index].exec(this.scope)
@@ -103,6 +103,8 @@ void main()
                 //
                 // }else{
 
+                this.list[index].name = this.list[index].name.replace(/\[]/gm, "")
+
                 Scope.functions[`${nname}_`] = element
 
                 // }
@@ -137,8 +139,8 @@ void main()
         let count = 0
 
         this.list.forEach((element, index) => {
-            if (element instanceof CreateVariable) {
-                count++
+            if (element instanceof Let || element instanceof Const) {
+                count += element.list.length
             }
         })
 
@@ -348,6 +350,91 @@ void main()
 \tStack[(int) #_t10] = #_t5;
 `, 4, 12)));
 
+        this.list.unshift(new Function(`string`, `__call_concatString__`, [
+                {
+                    type: 'boolean',
+                    name: 'numberVar'
+                },
+                {
+                    type: 'string',
+                    name: 'stringVar'
+                }
+            ],
+            new FixedCode(`// boolean
+\t#_t0 = p - 2;
+\t#_t1 = Stack[(int)#_t0];
+\t
+\t//string
+\t#_t2 = p - 3;
+\t#_t3 = Stack[(int)#_t2];
+
+\t//contador
+\t#_t4 = 0;
+
+\t// nuevo string
+\t#_t5 = h;
+\t#_t6 = #_t5 + 1;
+
+\t//boolean to string
+\tif(#_t1 == 0) goto #L1;
+
+\t#_t4 = 4;
+\t//116 114 117 101
+\tHeap[(int) #_t6] = 116;   // t
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 114;   // r
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 117;   // u
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 101;   // e
+\t#_t6 = #_t6 + 1;
+\t\t
+\tgoto #L2;
+\t#L1: 
+
+\t#_t4 = 5;
+\t// 102 97 108 115 101
+\tHeap[(int) #_t6] = 102;   \t// f
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 97;   \t// a
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 108;   \t// l
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 115;   \t// s
+\t#_t6 = #_t6 + 1;
+\tHeap[(int) #_t6] = 101;   \t// e
+\t#_t6 = #_t6 + 1;
+
+\t#L2:
+
+\t#_t7 = #_t3;
+\t#L3:
+\t#_t7 = #_t7 + 1;
+\t#_t8 = Heap[(int) #_t7]; 
+\tif(#_t8 == -1) goto #L4;
+
+\tHeap[(int) #_t6] = #_t8;
+\t#_t6 = #_t6 + 1;
+
+\tgoto #L3;
+\t#L4:
+
+
+
+\t#_t9 = Heap[(int) #_t3]; 
+\t#_t9 = #_t9 + #_t4;
+
+\tHeap[(int) #_t5] = #_t9;   // length 
+\t
+\t
+\tHeap[(int) #_t6] = -1;    // null
+\t#_t6 = #_t6 + 1;
+\th = #_t6;
+\t
+
+\t#_t10 = p - 1;
+\tStack[(int) #_t10] = #_t5;
+`, 4, 12)))
 
         this.list.unshift(new Function(`string`, `__call_concatString__`, [
                 {
@@ -747,7 +834,19 @@ void main()
 `, 10, 31)));
 
 
+        this.list.unshift(new Function(`boolean`, `__call_compareString__`, [
+                {
+                    type: 'string',
+                    name: 'numberVar'
+                },
+                {
+                    type: 'string',
+                    name: 'stringVar'
+                }
+            ],
+            new FixedCode(`
 
+`, 4, 13)));
 
     }
 }

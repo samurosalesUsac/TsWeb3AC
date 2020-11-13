@@ -125,18 +125,18 @@ class Addition extends Node {
             return new Symbol("Error")
         } else if (actualLeft.type != "Error" && actualRight.type != "Error") {
 
-            // this.setError(
-            //     "los tipos de dato : "
-            //     + actualLeft.type + " y " + actualRight.type +
-            //     "no son operables por el operador: " + this.operator)
-            // this.concatCode()
+            ErrorList = ErrorList.concat({
+                type : 'Semantico',
+                description : `Error en suma`,
+                line : this.line,
+                column : this.column});
             return new Symbol("Error")
 
 
         }
 
         // this.concatCode()
-        return new Symbol()
+        return new Symbol("Error")
 
     };
 
