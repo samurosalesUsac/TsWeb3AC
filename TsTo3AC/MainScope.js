@@ -19,13 +19,15 @@ class MainScope extends Node {
             }
         })
 
+        let head = this.createHead()
+
+        Node.globalOffset = head + 3
+        //Node.relativeP = head + 3
         this.addFixedFunctions()
 
         let functionsCode = this.declareFunctions()
 
-        let head = this.createHead()
 
-        Node.globalOffset = head + 3
 
         let mainCode = ''
         for(let index = 0; index < this.list.length; index++ ){
@@ -833,20 +835,20 @@ void main()
 \t
 `, 10, 31)));
 
-
-        this.list.unshift(new Function(`boolean`, `__call_compareString__`, [
-                {
-                    type: 'string',
-                    name: 'numberVar'
-                },
-                {
-                    type: 'string',
-                    name: 'stringVar'
-                }
-            ],
-            new FixedCode(`
-
-`, 4, 13)));
+//
+//         this.list.unshift(new Function(`boolean`, `__call_compareString__`, [
+//                 {
+//                     type: 'string',
+//                     name: 'numberVar'
+//                 },
+//                 {
+//                     type: 'string',
+//                     name: 'stringVar'
+//                 }
+//             ],
+//             new FixedCode(`
+//
+// `, 4, 13)));
 
     }
 }

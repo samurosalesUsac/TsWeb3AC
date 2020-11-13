@@ -94,5 +94,20 @@ class Main  {
         }
     }
 
+    printCode = function (){
+        let optCode = ''
+
+        this.mainOptList.forEach((node, index) =>{
+            try {
+                optCode += node.toString()
+            }catch (e) {
+               console.log('lina de codigo opt',index)
+            }
+
+        })
+
+        return optCode
+    }
+
 }
 

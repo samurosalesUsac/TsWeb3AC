@@ -6,5 +6,8 @@ class End {
     exec = function () {
     }
 
+    toString = function () {
+        return '\n}\n\n'
+    }
 
 }

@@ -116,6 +116,13 @@ class Call extends Node {
             return
         }
 
+
+        // for(let i = 0; i< this.parameters.length; i++){
+        //     let val = this.parameters[i].exec(scope)
+        //     this.setNewCode(this.parameters[i].parcialCode)
+        //     this.parameters[i] = val
+        // }
+
         let jumpP = scope.getNewIndex() + this.parameters.length + 3 //(return, this, super)
         this.setNewCode(`\np = p + ${jumpP}; \t // p en inicio de metodo -> salto + parametros + return`)
 
@@ -148,6 +155,7 @@ class Call extends Node {
 
         if (this.parameters.every(parameter => parameter.name == undefined)) {
 
+            // Node.relativeP += Node.globalOffset
             this.parameters.forEach((element, index) => {
 
                 this.setNewCode(`\n\t// parametro -> ${index + 1}`) // retorn en - length
@@ -167,6 +175,7 @@ class Call extends Node {
 
             });
 
+            // Node.relativeP -= Node.globalOffset
 
         } else if (this.parameters.every(parameter => parameter.name != undefined)) {
             console.log('Expressions && names')

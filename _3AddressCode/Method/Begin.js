@@ -6,5 +6,10 @@ class Begin {
     exec = function () {
     }
 
+    toString = function () {
+
+        return `\nvoid ${this.name} () {\n`
+
+    }
 
 }

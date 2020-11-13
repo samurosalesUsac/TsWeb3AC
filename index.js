@@ -68,10 +68,10 @@ function CompileCode () {
         autoColumns:true, //create columns from data field names
     });
 
-    // let table2 = new Tabulator("#example-table2", {
-    //     data:TableList, //assign data to table
-    //     autoColumns:true, //create columns from data field names
-    // });
+    let table2 = new Tabulator("#example-table2", {
+        data:TableList, //assign data to table
+        autoColumns:true, //create columns from data field names
+    });
 }
 
 function optCode(){
@@ -79,6 +79,8 @@ function optCode(){
     let codeToOpt = this.getLines(658, undefined, webTsConsole.getValue())
     let list = _3ACode.parse(codeToOpt)
     list.optCode()
+    webTsConsole.setValue(this.getLines(0,658, webTsConsole.getValue() ) + list.printCode())
+
 }
 
 var $ = go.GraphObject.make;

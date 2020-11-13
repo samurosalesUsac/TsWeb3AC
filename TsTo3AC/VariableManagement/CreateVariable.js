@@ -76,6 +76,20 @@ class CreateVariable extends Node{
                 }
             }
 
+        try {
+
+            TableList.push({
+                element : 'variable',
+                name : this.name,
+                state : state,
+                index : this.newIndex,
+                type :  this.type ,
+
+            })
+        }catch (e) {
+
+        }
+
 
         return retTemp
 
